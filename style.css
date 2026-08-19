@@ -1,0 +1,210 @@
+body,
+html {
+  height: 100%;  
+  font-family: 'Quicksand', sans-serif;
+  text-align: center;
+}
+
+.bg {
+  /* Location of the image */
+  background-image: url(./img/background.jpg);
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  background-color: #FEC0CD;
+  height: 100%;
+}
+
+.img {
+  display: inline-block;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  top: 20px;
+  margin-bottom: 30px;
+  width: 350px;
+}
+
+.tap-style {
+  display: inline-block;
+  cursor: pointer;
+  user-select: none;
+}
+
+.foto {
+  width: 80%;
+  max-width: 400px;
+  min-width: 300px;
+  margin-top: 100px;
+  display: inline-block;
+}
+
+/* Paper */
+@import url(https://fonts.googleapis.com/css?family=Roboto);
+@import url(https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap);
+
+.paper {
+  font-family: 'Roboto', sans-serif;
+  position: relative;
+  width: 90%;
+  max-width: 800px;
+  min-width: 300px;
+  height: 540px;
+  margin: 50px auto;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: normal;
+  background: #fafafa;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .3);
+  overflow: hidden;
+}
+
+.paper:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 5px;
+  width: 45px;
+  background: radial-gradient(#616161 6px, transparent 7px) repeat-y;
+  background-size: 30px 30px;
+  border-right: 3px solid #D44147;
+  box-sizing: border-box;
+  z-index: 2;
+}
+
+/* Static ruled background layer */
+.paper-content {
+  position: absolute;
+  top: 30px;
+  right: 0;
+  bottom: 30px;
+  left: 50px;
+  background: linear-gradient(transparent, transparent 31px, #75c6c9 31px, #75c6c9 33px);
+  background-size: 100% 33px;
+  pointer-events: none;
+}
+
+/* Independent floating text layer */
+.paper-content .teks {
+  text-align: left;
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  max-height: 100%;
+  line-height: 36px !important; /* Strictly matched with 33px background grid */
+  padding: 0 10px;
+  margin: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #3f3f44;
+  font-family: 'Gloria Hallelujah', cursive;
+  font-size: 15px;
+  box-sizing: border-box;
+  z-index: 3;
+  pointer-events: auto;
+
+  /* Adjust this pixel value freely to float the text up (-) or down (+) */
+  transform: translateY(4px);
+}
+
+/* Locks child elements and line breaks to exact 33px intervals */
+.paper-content .teks * {
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 33px !important;
+}
+
+.paper-content .teks br {
+  display: block;
+  content: "";
+  height: 33px;
+  line-height: 33px;
+}
+
+.kotak {
+  position: relative;
+  width: 90%;
+  max-width: 550px;
+  min-width: 200px;
+  max-height: 350px;
+  min-height: 100px;
+  top: 300px;
+  padding: 20px 0;
+  display: inline-block;
+  background: #fafafa;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .3);
+  overflow: hidden;
+}
+
+.btn {
+  border-radius: 40px;
+}
+
+#slideLima {
+  position: relative;
+  top: 250px;
+}
+
+#trims {
+  position: relative;
+  display: inline-block;
+  font-family: 'Gloria Hallelujah', cursive;
+  font-size: 20px;
+}
+
+/* Independent Bottom-Right Signature */
+#signature-container {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  z-index: 99999;
+  pointer-events: none;
+}
+
+.signature-text {
+  font-family: 'Gloria Hallelujah', cursive;
+  font-size: 16px;
+  font-weight: bold;
+  color: #636b73;
+  opacity: 0.85;
+  user-select: none;
+}
+
+h1 {
+  font-weight: normal;
+}
+
+li {
+  display: inline-block;
+  font-size: 16px;
+  list-style-type: none;
+  position: relative;
+  left: -20px;
+  margin-top: 10px;
+  padding: 10px;
+  text-transform: uppercase;
+}
+
+li span {
+  display: block;
+  font-size: 24px;
+}
+
+body {
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.container {
+  color: #333;
+  position: relative;
+  top: 250px;
+  padding: 0;
+  text-align: center;
+}
