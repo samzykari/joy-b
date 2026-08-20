@@ -15,18 +15,21 @@ const timer = document.getElementById('timer');
 
 const second = 1000,
   minute = second * 60,
-  hour = minute * 60;
+  hour = minute * 60,
+  day = hour * 24;
 
-let countDown = new Date('Oct 22, 2023 00:00:00').getTime(),
+let countDown = new Date('Aug 22, 2025 00:00:00').getTime(),
   x = setInterval(function () {
     let now = new Date().getTime(),
       distance = countDown - now;
 
+    const daysElem = document.getElementById('days');
     const hoursElem = document.getElementById('hours');
     const minutesElem = document.getElementById('minutes');
     const secondsElem = document.getElementById('seconds');
 
-    if (hoursElem) hoursElem.innerText = Math.floor(distance / hour);
+    if (daysElem) daysElem.innerText = Math.floor(distance / day);
+    if (hoursElem) hoursElem.innerText = Math.floor((distance % day) / hour);
     if (minutesElem) minutesElem.innerText = Math.floor((distance % hour) / minute);
     if (secondsElem) secondsElem.innerText = Math.floor((distance % minute) / second);
 
@@ -64,13 +67,30 @@ function showTap(onTapCallback) {
 
 const _slideSatu = function () {
   const slideSatu = document.getElementById('slideSatu');
+  const music = document.getElementById('background-music');
+
   if (slideSatu) {
     slideSatu.className = 'animate__animated animate__slideInDown animate__slow';
   }
 
-  setTimeout(function () {
-    showTap(_slideDua);
-  }, 1200);
+  function proceedWhenReady() {
+    setTimeout(function () {
+      showTap(_slideDua);
+    }, 800);
+  }
+
+  // Check if audio has already buffered completely
+  if (music && music.readyState >= 4) {
+    proceedWhenReady();
+  } else if (music) {
+    // Wait until browser predicts audio can play through without buffering
+    music.addEventListener('canplaythrough', proceedWhenReady, { once: true });
+    
+    // Safety fallback (5s max) in case network blocks canplaythrough event
+    setTimeout(proceedWhenReady, 5000);
+  } else {
+    proceedWhenReady();
+  }
 };
 
 const _slideDua = function () {
@@ -102,7 +122,8 @@ const _slideDua = function () {
       'Anyways',
       ' ',
       'Baby G sasa amefikisha 18, huku hatutapumua',
-      'Bado we ni mtoto!',
+      ' ',
+      'Bado we ni mtoto!'
     ],
     startDelay: 500,
     speed: 50,
@@ -132,7 +153,7 @@ const _slideTiga = function () {
   // @ts-ignore
   new TypeIt('#teks2', {
     strings: [
-      'IDK, dont have anything to say',
+      'IDK what to say',
       ' ',
       'Advice ambia Mom na Dad wakupee, ju all I know is brainrot... six seven - typical gen z.',
       ' ',
@@ -141,7 +162,8 @@ const _slideTiga = function () {
       'May God shower you with blessings coz youll really need them now that youre an "adult". - in quotes',
       ' ',
       'From your very intelligent, humble, handsome and beautiful brother.',
-      'Excactly your words, not mine',
+      ' ',
+      'Excactly your words, not mine'
     ],
     startDelay: 500,
     speed: 50,
