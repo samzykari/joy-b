@@ -1,26 +1,33 @@
 const timer = document.getElementById('timer');
+const music = document.getElementById('background-music');
 
 const second = 1000,
   minute = second * 60,
   hour = minute * 60,
   day = hour * 24;
 
-// Global mobile audio unlocker
 let audioUnlocked = false;
-function triggerAudio() {
-  const music = document.getElementById('background-music');
+
+function playBackgroundAudio() {
   if (music && !audioUnlocked) {
-    music.play().then(() => {
-      audioUnlocked = true;
-    }).catch(() => {});
+    music.volume = 1.0;
+    const promise = music.play();
+    if (promise !== undefined) {
+      promise
+        .then(() => {
+          audioUnlocked = true;
+        })
+        .catch(() => {});
+    }
   }
 }
 
-// Early interaction triggers for mobile WebKit & Android Chrome
-window.addEventListener('touchstart', triggerAudio, { once: true, passive: true });
-window.addEventListener('click', triggerAudio, { once: true });
+// Global user interaction triggers for PC & Mobile
+['click', 'touchstart', 'touchend', 'pointerdown'].forEach((event) => {
+  window.addEventListener(event, playBackgroundAudio, { once: true, passive: true });
+});
 
-let countDown = new Date('Oct 22, 2025 00:00:00').getTime(),
+let countDown = new Date('Oct 22, 2026 00:00:00').getTime(),
   x = setInterval(function () {
     let now = new Date().getTime(),
       distance = countDown - now;
@@ -57,7 +64,7 @@ function showTap(onTapCallback) {
   tap.classList.remove('d-none');
 
   tapHandler = function () {
-    triggerAudio();
+    playBackgroundAudio();
     tap.classList.add('d-none');
     document.body.removeEventListener('click', tapHandler);
     document.body.removeEventListener('touchend', tapHandler);
@@ -71,7 +78,6 @@ function showTap(onTapCallback) {
   }, 100);
 }
 
-// Asset loader with strict timeout fallback
 function waitForAllAssets(callback) {
   const loader = document.getElementById('loader');
   if (loader) {
