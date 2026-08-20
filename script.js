@@ -5,7 +5,7 @@ const second = 1000,
   hour = minute * 60,
   day = hour * 24;
 
-// Audio unlock helper for Mobile WebKit & Chrome
+// Global mobile audio unlocker
 let audioUnlocked = false;
 function triggerAudio() {
   const music = document.getElementById('background-music');
@@ -15,6 +15,10 @@ function triggerAudio() {
     }).catch(() => {});
   }
 }
+
+// Early interaction triggers for mobile WebKit & Android Chrome
+window.addEventListener('touchstart', triggerAudio, { once: true, passive: true });
+window.addEventListener('click', triggerAudio, { once: true });
 
 let countDown = new Date('Oct 22, 2025 00:00:00').getTime(),
   x = setInterval(function () {
@@ -47,30 +51,44 @@ function showTap(onTapCallback) {
 
   if (tapHandler) {
     document.body.removeEventListener('click', tapHandler);
+    document.body.removeEventListener('touchend', tapHandler);
   }
 
   tap.classList.remove('d-none');
 
   tapHandler = function () {
-    triggerAudio(); // Direct user-gesture triggers audio reliably on mobile
+    triggerAudio();
     tap.classList.add('d-none');
     document.body.removeEventListener('click', tapHandler);
+    document.body.removeEventListener('touchend', tapHandler);
     tapHandler = null;
     onTapCallback();
   };
 
   setTimeout(() => {
     document.body.addEventListener('click', tapHandler);
+    document.body.addEventListener('touchend', tapHandler, { passive: true });
   }, 100);
 }
 
-// Ensure all images, fonts, and assets are fully loaded before allowing continuation
-// Ensure all images, fonts, and assets are fully loaded before allowing continuation
+// Asset loader with strict timeout fallback
 function waitForAllAssets(callback) {
   const loader = document.getElementById('loader');
   if (loader) {
-    loader.classList.remove('d-none'); // Show loading text
+    loader.classList.remove('d-none');
   }
+
+  let finished = false;
+  function finish() {
+    if (finished) return;
+    finished = true;
+    if (loader) {
+      loader.classList.add('d-none');
+    }
+    callback();
+  }
+
+  const fallbackTimeout = setTimeout(finish, 2000);
 
   const checkFonts = document.fonts ? document.fonts.ready : Promise.resolve();
   const checkWindow = new Promise((resolve) => {
@@ -82,21 +100,8 @@ function waitForAllAssets(callback) {
   });
 
   Promise.all([checkFonts, checkWindow]).then(() => {
-    const music = document.getElementById('background-music');
-
-    function onReady() {
-      if (loader) {
-        loader.classList.add('d-none'); // Hide loading text
-      }
-      callback();
-    }
-
-    if (music && music.readyState < 4) {
-      music.addEventListener('canplaythrough', onReady, { once: true });
-      setTimeout(onReady, 3500); // Safety fallback so user is never stuck
-    } else {
-      onReady();
-    }
+    clearTimeout(fallbackTimeout);
+    finish();
   });
 }
 
@@ -281,6 +286,7 @@ function resetToBeginning() {
 
   if (tapHandler) {
     document.body.removeEventListener('click', tapHandler);
+    document.body.removeEventListener('touchend', tapHandler);
     tapHandler = null;
   }
 
