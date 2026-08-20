@@ -1,16 +1,3 @@
-// Function to start music
-function playMusic() {
-  const music = document.getElementById('background-music');
-  if (music) {
-    music.play().catch(() => {});
-  }
-}
-
-window.addEventListener('DOMContentLoaded', function () {
-  playMusic();
-});
-document.body.addEventListener('click', playMusic, { once: true });
-
 const timer = document.getElementById('timer');
 
 const second = 1000,
@@ -18,7 +5,18 @@ const second = 1000,
   hour = minute * 60,
   day = hour * 24;
 
-let countDown = new Date('Aug 22, 2025 00:00:00').getTime(),
+// Audio unlock helper for Mobile WebKit & Chrome
+let audioUnlocked = false;
+function triggerAudio() {
+  const music = document.getElementById('background-music');
+  if (music && !audioUnlocked) {
+    music.play().then(() => {
+      audioUnlocked = true;
+    }).catch(() => {});
+  }
+}
+
+let countDown = new Date('Oct 22, 2025 00:00:00').getTime(),
   x = setInterval(function () {
     let now = new Date().getTime(),
       distance = countDown - now;
@@ -54,6 +52,7 @@ function showTap(onTapCallback) {
   tap.classList.remove('d-none');
 
   tapHandler = function () {
+    triggerAudio(); // Direct user-gesture triggers audio reliably on mobile
     tap.classList.add('d-none');
     document.body.removeEventListener('click', tapHandler);
     tapHandler = null;
@@ -65,32 +64,51 @@ function showTap(onTapCallback) {
   }, 100);
 }
 
+// Ensure all images, fonts, and assets are fully loaded before allowing continuation
+// Ensure all images, fonts, and assets are fully loaded before allowing continuation
+function waitForAllAssets(callback) {
+  const loader = document.getElementById('loader');
+  if (loader) {
+    loader.classList.remove('d-none'); // Show loading text
+  }
+
+  const checkFonts = document.fonts ? document.fonts.ready : Promise.resolve();
+  const checkWindow = new Promise((resolve) => {
+    if (document.readyState === 'complete') {
+      resolve();
+    } else {
+      window.addEventListener('load', resolve, { once: true });
+    }
+  });
+
+  Promise.all([checkFonts, checkWindow]).then(() => {
+    const music = document.getElementById('background-music');
+
+    function onReady() {
+      if (loader) {
+        loader.classList.add('d-none'); // Hide loading text
+      }
+      callback();
+    }
+
+    if (music && music.readyState < 4) {
+      music.addEventListener('canplaythrough', onReady, { once: true });
+      setTimeout(onReady, 3500); // Safety fallback so user is never stuck
+    } else {
+      onReady();
+    }
+  });
+}
+
 const _slideSatu = function () {
   const slideSatu = document.getElementById('slideSatu');
-  const music = document.getElementById('background-music');
-
   if (slideSatu) {
     slideSatu.className = 'animate__animated animate__slideInDown animate__slow';
   }
 
-  function proceedWhenReady() {
-    setTimeout(function () {
-      showTap(_slideDua);
-    }, 800);
-  }
-
-  // Check if audio has already buffered completely
-  if (music && music.readyState >= 4) {
-    proceedWhenReady();
-  } else if (music) {
-    // Wait until browser predicts audio can play through without buffering
-    music.addEventListener('canplaythrough', proceedWhenReady, { once: true });
-    
-    // Safety fallback (5s max) in case network blocks canplaythrough event
-    setTimeout(proceedWhenReady, 5000);
-  } else {
-    proceedWhenReady();
-  }
+  waitForAllAssets(() => {
+    showTap(_slideDua);
+  });
 };
 
 const _slideDua = function () {
@@ -122,7 +140,6 @@ const _slideDua = function () {
       'Anyways',
       ' ',
       'Baby G sasa amefikisha 18, huku hatutapumua',
-      ' ',
       'Bado we ni mtoto!'
     ],
     startDelay: 500,
@@ -162,7 +179,6 @@ const _slideTiga = function () {
       'May God shower you with blessings coz youll really need them now that youre an "adult". - in quotes',
       ' ',
       'From your very intelligent, humble, handsome and beautiful brother.',
-      ' ',
       'Excactly your words, not mine'
     ],
     startDelay: 500,
