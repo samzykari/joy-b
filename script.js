@@ -27,7 +27,7 @@ function playBackgroundAudio() {
   window.addEventListener(event, playBackgroundAudio, { once: true, passive: true });
 });
 
-let countDown = new Date('Oct 22, 2025 00:00:00').getTime(),
+let countDown = new Date('Aug 22, 2026 00:00:00').getTime(),
   x = setInterval(function () {
     let now = new Date().getTime(),
       distance = countDown - now;
@@ -181,7 +181,7 @@ const _slideTiga = function () {
   // @ts-ignore
   new TypeIt('#teks2', {
     strings: [
-      'IDK what to say',
+      'IDK, dont have anything to say',
       ' ',
       'Advice ambia Mom na Dad wakupee, ju all I know is brainrot... six seven - typical gen z.',
       ' ',
