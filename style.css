@@ -207,3 +207,39 @@ body {
   padding: 0;
   text-align: center;
 }
+/* -------------------------------------------------------------
+   1. FORCE FIREFOX TO STOP AUTO-INFLATING TEXT & SPACING
+------------------------------------------------------------- */
+body, html, .paper, .paper-content, .paper-content .teks {
+  -moz-text-size-adjust: 100% !important;
+  text-size-adjust: 100% !important;
+}
+
+/* -------------------------------------------------------------
+   2. TARGET CHROME SPECIFICALLY
+------------------------------------------------------------- */
+@supports (-webkit-appearance: none) and (not (-moz-appearance: none)) {
+  .paper-content .teks {
+    /* Chrome baseline adjustment */
+    transform: translateY(4px);
+  }
+}
+
+/* -------------------------------------------------------------
+   3. TARGET FIREFOX SPECIFICALLY
+------------------------------------------------------------- */
+@-moz-document url-prefix() {
+  .paper-content .teks {
+    /* Adjust this pixel value up or down ONLY for Firefox */
+    transform: translateY(2px);
+    line-height: 33px !important;
+  }
+
+  /* Force Firefox to treat <br> as an exact 33px block */
+  .paper-content .teks br {
+    display: inline-block !important;
+    height: 33px !important;
+    line-height: 33px !important;
+    vertical-align: top !important;
+  }
+}

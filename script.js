@@ -27,7 +27,7 @@ function playBackgroundAudio() {
   window.addEventListener(event, playBackgroundAudio, { once: true, passive: true });
 });
 
-let countDown = new Date('Oct 22, 2026 00:00:00').getTime(),
+let countDown = new Date('Oct 22, 2025 00:00:00').getTime(),
   x = setInterval(function () {
     let now = new Date().getTime(),
       distance = countDown - now;
