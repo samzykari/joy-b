@@ -27,10 +27,16 @@ function playBackgroundAudio() {
   window.addEventListener(event, playBackgroundAudio, { once: true, passive: true });
 });
 
-let countDown = new Date('2026-08-22T00:00:00').getTime();
+let countDown = new Date('2026-08-22T00:00:00').getTime(),
   x = setInterval(function () {
     let now = new Date().getTime(),
       distance = countDown - now;
+
+    // Guard against invalid Date parsing
+    if (isNaN(distance)) {
+      console.error("Invalid countdown date format");
+      return;
+    }
 
     const daysElem = document.getElementById('days');
     const hoursElem = document.getElementById('hours');
@@ -42,7 +48,7 @@ let countDown = new Date('2026-08-22T00:00:00').getTime();
     if (minutesElem) minutesElem.innerText = Math.floor((distance % hour) / minute);
     if (secondsElem) secondsElem.innerText = Math.floor((distance % minute) / second);
 
-    if (distance < 0) {
+    if (distance <= 0) {
       if (timer) timer.classList.add('d-none');
       confetti();
       clearInterval(x);
